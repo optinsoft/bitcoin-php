@@ -4,43 +4,39 @@ declare(strict_types=1);
 
 namespace BitWasp\Bitcoin\Transaction\Mutator;
 
-abstract class AbstractCollectionMutator implements \Iterator, \ArrayAccess, \Countable
+abstract class AbstractCollectionMutator implements \ArrayAccess, \Countable, \Iterator
 {
     /**
      * @var \SplFixedArray
      */
     protected $set;
 
-    /**
-     * @return array
-     */
     public function all(): array
     {
         return $this->set->toArray();
     }
 
-    /**
-     * @return bool
-     */
     public function isNull(): bool
     {
         return count($this->set) === 0;
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return $this->set->count();
     }
 
-    /**
-     *
-     */
-    public function rewind()
+    public function rewind(): void
     {
-        $this->set->rewind();
+        if ($this->set instanceof \ArrayIterator) {
+            $this->set->rewind();
+        } elseif ($this->set instanceof \SplFixedArray) {
+            $array = $this->set->toArray();
+            $this->set = new \ArrayIterator($array);
+            $this->set->rewind();
+        } else {
+            throw new \LogicException('Unsupported collection type for rewind');
+        }
     }
 
     /**
@@ -51,45 +47,35 @@ abstract class AbstractCollectionMutator implements \Iterator, \ArrayAccess, \Co
         return $this->set->current();
     }
 
-    /**
-     * @return int
-     */
-    public function key()
+    public function key(): int
     {
         return $this->set->key();
     }
 
-    /**
-     *
-     */
-    public function next()
+    public function next(): void
     {
         $this->set->next();
     }
 
-    /**
-     * @return bool
-     */
-    public function valid()
+    public function valid(): bool
     {
         return $this->set->valid();
     }
 
     /**
-     * @param int $offset
-     * @return bool
+     * @param  int  $offset
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->set->offsetExists($offset);
     }
 
     /**
-     * @param int $offset
+     * @param  int  $offset
      */
     public function offsetUnset($offset)
     {
-        if (!$this->offsetExists($offset)) {
+        if (! $this->offsetExists($offset)) {
             throw new \InvalidArgumentException('Offset does not exist');
         }
 
@@ -97,20 +83,21 @@ abstract class AbstractCollectionMutator implements \Iterator, \ArrayAccess, \Co
     }
 
     /**
-     * @param int $offset
+     * @param  int  $offset
      * @return mixed
      */
     public function offsetGet($offset)
     {
-        if (!$this->set->offsetExists($offset)) {
+        if (! $this->set->offsetExists($offset)) {
             throw new \OutOfRangeException('Nothing found at this offset');
         }
+
         return $this->set->offsetGet($offset);
     }
 
     /**
-     * @param int $offset
-     * @param mixed $value
+     * @param  int  $offset
+     * @param  mixed  $value
      */
     public function offsetSet($offset, $value)
     {
