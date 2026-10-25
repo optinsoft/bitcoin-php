@@ -42,7 +42,7 @@ abstract class AbstractCollectionMutator implements \ArrayAccess, \Countable, \I
     /**
      * @return mixed
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->set->current();
     }
@@ -73,7 +73,7 @@ abstract class AbstractCollectionMutator implements \ArrayAccess, \Countable, \I
     /**
      * @param  int  $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         if (! $this->offsetExists($offset)) {
             throw new \InvalidArgumentException('Offset does not exist');
@@ -86,7 +86,7 @@ abstract class AbstractCollectionMutator implements \ArrayAccess, \Countable, \I
      * @param  int  $offset
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if (! $this->set->offsetExists($offset)) {
             throw new \OutOfRangeException('Nothing found at this offset');
@@ -99,7 +99,7 @@ abstract class AbstractCollectionMutator implements \ArrayAccess, \Countable, \I
      * @param  int  $offset
      * @param  mixed  $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->set->offsetSet($offset, $value);
     }

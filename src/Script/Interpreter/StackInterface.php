@@ -88,7 +88,7 @@ interface StackInterface extends \ArrayAccess, \Iterator
      * @param  int  $offset
      * @return void
      */
-    public function offsetUnset($offset);
+    public function offsetUnset($offset): void;
 
     /**
      * @see \ArrayAccess::offsetSet()
@@ -97,7 +97,7 @@ interface StackInterface extends \ArrayAccess, \Iterator
      * @param  BufferInterface  $value
      * @return void
      */
-    public function offsetSet($offset, $value);
+    public function offsetSet($offset, $value): void;
 
     /**
      * Return the current element
@@ -122,7 +122,7 @@ interface StackInterface extends \ArrayAccess, \Iterator
      *
      * @return mixed scalar on success, or null on failure.
      */
-    public function key();
+    public function key(): mixed;
 
     /**
      * Checks if current position is valid

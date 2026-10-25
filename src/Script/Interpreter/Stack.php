@@ -66,7 +66,7 @@ class Stack implements \ArrayAccess, \Countable, \Iterator
     /**
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->values);
     }
@@ -98,7 +98,7 @@ class Stack implements \ArrayAccess, \Countable, \Iterator
      * @param  int  $offset
      * @return \BitWasp\Buffertools\BufferInterface
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): BufferInterface
     {
         $index = count($this) + $offset;
         if (! isset($this->values[$index])) {
@@ -116,7 +116,7 @@ class Stack implements \ArrayAccess, \Countable, \Iterator
      *
      * @throws \InvalidArgumentException
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (! $value instanceof BufferInterface) {
             throw new \InvalidArgumentException;
@@ -152,7 +152,7 @@ class Stack implements \ArrayAccess, \Countable, \Iterator
      *
      * @param  int  $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $count = count($this);
         $index = $count + $offset;
